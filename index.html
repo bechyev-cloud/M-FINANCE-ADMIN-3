@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Мои Финансы — админ-панель</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+@font-face{font-family:Unbounded;font-weight:600;font-display:swap;src:url(fonts/unbounded-cyrillic-600-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Unbounded;font-weight:600;font-display:swap;src:url(fonts/unbounded-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
+@font-face{font-family:Unbounded;font-weight:700;font-display:swap;src:url(fonts/unbounded-cyrillic-700-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Unbounded;font-weight:700;font-display:swap;src:url(fonts/unbounded-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
+@font-face{font-family:Manrope;font-weight:500;font-display:swap;src:url(fonts/manrope-cyrillic-500-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Manrope;font-weight:500;font-display:swap;src:url(fonts/manrope-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
+@font-face{font-family:Manrope;font-weight:700;font-display:swap;src:url(fonts/manrope-cyrillic-700-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Manrope;font-weight:700;font-display:swap;src:url(fonts/manrope-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
+@font-face{font-family:Manrope;font-weight:800;font-display:swap;src:url(fonts/manrope-cyrillic-800-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Manrope;font-weight:800;font-display:swap;src:url(fonts/manrope-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
+:root{--bg:#F5EFE3;--paper:#FBF8F1;--card:#fff;--sunken:#F5EFE3;--ink:#372B1E;--soft:#7A6D5C;--gold:#C08F4C;--gold-deep:#A9773A;--gold-bg:#F3E7DD;--sage-deep:#6E7A5C;--sage-bg:#EAEEE3;--danger:#C44444;--danger-bg:#FBEAEA;--line:#E7DCC6;--shadow:80,62,34;--btn:#372B1E;--btn-fg:#FBF8F1;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#13100C;--paper:#1A1611;--card:#221D16;--sunken:#171310;--ink:#F3EADB;--soft:#AFA18C;--gold:#D2A45F;--gold-deep:#E2B876;--gold-bg:#3A2D1A;--sage-deep:#B3C49D;--sage-bg:#283020;--danger:#EC8177;--danger-bg:#3C201D;--line:#372E22;--shadow:0,0,0;--btn:#E9C68D;--btn-fg:#2A2015;color-scheme:dark}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:500 14px/1.45 Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100dvh}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}a{text-decoration:none;color:inherit}
+h1,h2,h3,.disp{font-family:Unbounded,system-ui,sans-serif}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:22px 20px 60px}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.top img{width:38px;height:38px;border-radius:12px}
+.top h1{font-size:18px;font-weight:700;flex:1;min-width:180px}.top h1 span{color:var(--gold-deep)}
+.top small{display:block;font:500 12px Manrope,sans-serif;color:var(--soft);margin-top:2px}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:18px;padding-bottom:2px;scrollbar-width:none}
+.tab{flex-shrink:0;padding:9px 16px;border-radius:99px;font-weight:700;font-size:13px;background:var(--card);border:1px solid var(--line);color:var(--soft)}
+.tab.on{background:var(--btn);border-color:var(--btn);color:var(--btn-fg);box-shadow:0 8px 16px -8px rgba(var(--shadow),.5)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 20px -14px rgba(var(--shadow),.22)}
+.pad{padding:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.stat{padding:15px}.stat small{color:var(--soft);font-size:12px;font-weight:700}.stat b{display:block;font:700 20px Unbounded,sans-serif;margin-top:6px}
+.hero{border-radius:26px;padding:22px;color:#fff;background:linear-gradient(135deg,#372B1E,#54402B 58%,#6B5136);box-shadow:0 22px 40px -20px rgba(var(--shadow),.7);margin-bottom:16px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:220px;height:220px;right:-60px;top:-90px;border-radius:50%;background:radial-gradient(circle,rgba(192,143,76,.6),transparent 70%)}
+.hero h2{font-size:17px;position:relative}.hero p{opacity:.85;font-size:13px;margin-top:6px;position:relative;max-width:560px}
+h3{font-size:14.5px;font-weight:600;margin:24px 0 12px}
+.row{display:flex;align-items:center;gap:12px;padding:13px 16px;flex-wrap:wrap}.row+.row{border-top:1px solid var(--line)}
+.grow{flex:1;min-width:180px}.title{font-weight:700;font-size:13.5px;overflow-wrap:anywhere}.sub{font-size:12px;color:var(--soft);overflow-wrap:anywhere}
+.av{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#EBC27F,#C08F4C);color:#372B1E;font:700 13px Unbounded,sans-serif;flex-shrink:0}
+.badge{display:inline-block;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px;background:var(--sunken);color:var(--soft);margin-left:6px;white-space:nowrap}
+.badge.gold{background:var(--gold-bg);color:var(--gold-deep)}.badge.sage{background:var(--sage-bg);color:var(--sage-deep)}.badge.danger{background:var(--danger-bg);color:var(--danger)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 18px;border-radius:99px;font-weight:800;font-size:13px;background:var(--btn);color:var(--btn-fg);box-shadow:0 10px 20px -10px rgba(var(--shadow),.6);white-space:nowrap}
+.btn:disabled{opacity:.55}.btn.ghost{background:var(--sunken);color:var(--ink);border:1px solid var(--line);box-shadow:none}.btn.danger{background:var(--danger-bg);color:var(--danger);box-shadow:none}
+.btn.sm{min-height:34px;padding:0 13px;font-size:12px}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+label.f{display:block;margin-bottom:14px}label.f>span{display:block;font-size:11px;font-weight:800;color:var(--soft);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+input,textarea,select{width:100%;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:11px 13px;font:inherit;color:var(--ink);outline:none;min-height:44px}
+textarea{min-height:130px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 22%,transparent)}
+.hint{font-size:12px;color:var(--soft);margin-top:5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:560px){.two{grid-template-columns:1fr}}
+.sw{width:44px;height:26px;border-radius:99px;background:var(--line);position:relative;flex-shrink:0;transition:background .2s}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.25);transition:transform .2s}
+.sw[aria-checked=true]{background:var(--sage-deep)}.sw[aria-checked=true]::after{transform:translateX(18px)}
+.ov{position:fixed;inset:0;background:rgba(40,30,20,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:10;backdrop-filter:blur(2px)}
+.modal{background:var(--paper);border-radius:26px;padding:24px;width:100%;max-width:520px;max-height:90dvh;overflow:auto;box-shadow:0 30px 60px -20px rgba(var(--shadow),.5)}
+.modal h2{font-size:16px;margin-bottom:6px}.modal>p{color:var(--soft);font-size:12.5px;margin-bottom:16px}
+.err{background:var(--danger-bg);color:var(--danger);border-radius:12px;padding:10px 12px;font-size:12.5px;font-weight:700;margin-bottom:14px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:99px;font-weight:700;font-size:13px;box-shadow:0 14px 30px -10px rgba(var(--shadow),.6);z-index:20;max-width:calc(100vw - 32px)}
+.toast.bad{background:var(--danger);color:#fff}
+.login{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login .modal{max-width:400px}
+.empty{text-align:center;color:var(--soft);padding:34px 20px;font-size:13px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+'use strict';
+// Весь пользовательский текст выводится через textContent — разметка из данных не исполняется.
+const h = (tag, props = {}, ...kids) => {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (v === null || v === undefined || v === false) continue;
+    if (k === 'class') el.className = v; else if (k.startsWith('on')) el.addEventListener(k.slice(2), v); else if (k in el && k !== 'list') el[k] = v; else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const kid of kids.flat()) if (kid !== null && kid !== undefined && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+  return el;
+};
+const root = document.getElementById('app');
+const KEY = 'mf.adminKey';
+let key = sessionStorage.getItem(KEY) || '';
+let data = null, tab = 'overview', filter = '';
+
+async function api(method, path, body) {
+  let res;
+  try { res = await fetch('/api/panel' + path, { method, headers: { 'X-Admin-Key': key, ...(body ? { 'Content-Type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined }); }
+  catch { throw new Error('Нет соединения с сервером'); }
+  const json = await res.json().catch(() => null);
+  if (res.status === 401) { key = ''; sessionStorage.removeItem(KEY); if (data) { data = null; render(); } }
+  if (!res.ok) throw new Error(json?.error?.message || 'Не удалось выполнить запрос');
+  return json;
+}
+function toast(text, bad) { const t = h('div', { class: 'toast' + (bad ? ' bad' : ''), role: 'status' }, text); document.body.append(t); setTimeout(() => t.remove(), bad ? 4500 : 2400); }
+async function act(fn, okText) { try { await fn(); if (okText) toast(okText); await load(); } catch (e) { toast(e.message, true); } }
+async function load() { data = await api('GET', '/overview'); render(); }
+const fmtDate = (iso) => iso ? new Date(iso).toLocaleString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+const initials = (u) => ((u.firstName?.[0] || '') + (u.lastName?.[0] || '')).toUpperCase() || '?';
+const name = (u) => `${u.firstName} ${u.lastName}`.trim();
+const field = (label, input, hint) => h('label', { class: 'f' }, h('span', {}, label), input, hint ? h('div', { class: 'hint' }, hint) : null);
+const sw = (on, label, onchange) => h('button', { class: 'sw', role: 'switch', 'aria-checked': String(!!on), 'aria-label': label, type: 'button', onclick: () => onchange(!on) });
+
+function modal(title, text, build) {
+  const close = () => ov.remove();
+  const err = h('div', { class: 'err', hidden: true });
+  const fail = (m) => { err.textContent = m; err.hidden = false; };
+  const box = h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true' }, h('h2', {}, title), text ? h('p', {}, text) : null);
+  const ov = h('div', { class: 'ov', onmousedown: (e) => { if (e.target === ov) close(); } }, box);
+  box.append(...build({ close, fail, err }));
+  document.body.append(ov);
+  box.querySelector('input,textarea,select')?.focus();
+  return close;
+}
+function formModal(title, text, fields, submitText, onSubmit) {
+  modal(title, text, ({ close, fail, err }) => {
+    const inputs = {};
+    const form = h('form', { onsubmit: async (e) => {
+      e.preventDefault(); err.hidden = true;
+      const values = Object.fromEntries(Object.entries(inputs).map(([k, el]) => [k, el.value.trim?.() ?? el.value]));
+      const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
+      try { await onSubmit(values); close(); await load(); } catch (ex) { fail(ex.message); btn.disabled = false; }
+    } });
+    for (const f of fields) {
+      const el = f.options ? h('select', {}, f.options.map(([v, l]) => h('option', { value: v, selected: v === f.value }, l))) : h(f.area ? 'textarea' : 'input', { type: f.type || 'text', value: f.value ?? '', placeholder: f.placeholder || '', autocomplete: 'off' });
+      inputs[f.key] = el; form.append(field(f.label, el, f.hint));
+    }
+    form.append(err, h('div', { class: 'acts', style: 'justify-content:flex-end' }, h('button', { class: 'btn ghost', type: 'button', onclick: close }, 'Отмена'), h('button', { class: 'btn', type: 'submit' }, submitText)));
+    return [form];
+  });
+}
+
+// ── экраны ──
+function loginView() {
+  const input = h('input', { type: 'password', placeholder: 'Ключ администратора', autocomplete: 'current-password' });
+  const err = h('div', { class: 'err', hidden: true });
+  const form = h('form', { class: 'modal', onsubmit: async (e) => {
+    e.preventDefault(); key = input.value.trim(); err.hidden = true;
+    try { await load(); sessionStorage.setItem(KEY, key); } catch (ex) { err.textContent = ex.message; err.hidden = false; }
+  } },
+    h('div', { class: 'top' }, h('img', { src: 'icon.svg', alt: '' }), h('h1', {}, 'Мои ', h('span', {}, 'Финансы'), h('small', {}, 'Админ-панель сервера'))),
+    h('p', { style: 'color:var(--soft);font-size:13px;margin-bottom:16px' }, 'Вход по ключу администратора — аккаунт пользователя не нужен. Ключ лежит в файле admin-key.txt в папке data на сервере.'),
+    field('Ключ', input), err, h('button', { class: 'btn', type: 'submit', style: 'width:100%' }, 'Войти'));
+  return h('div', { class: 'login' }, form);
+}
+
+function overviewView() {
+  const s = data.stats, cfg = data.settings;
+  const stat = (label, value) => h('div', { class: 'card stat' }, h('small', {}, label), h('b', {}, String(value)));
+  return [
+    h('div', { class: 'hero' }, h('h2', {}, cfg.companyName), h('p', {}, `Сервер работает. Регистрация ${cfg.registrationOpen ? 'открыта' : 'закрыта'}; серверные настройки в приложениях ${cfg.hideServerSettings ? 'скрыты' : 'видны'}${cfg.moveToUrl ? `; перенос на ${cfg.moveToUrl}` : ''}.`)),
+    h('div', { class: 'grid' }, stat('Пользователи', s.users), stat('Контакты', s.contacts), stat('Активные долги', s.activeDebts), stat('Оплаты', s.payments), stat('Событий в журнале', s.events), stat('Общая база ЧС', s.sharedEntries), stat('Внешняя база', s.externalEntries), stat('Размер базы', (s.dbBytes / 1048576).toFixed(1).replace('.', ',') + ' МБ')),
+    h('h3', {}, 'Адреса'),
+    h('div', { class: 'card' },
+      h('div', { class: 'row' }, h('div', { class: 'grow' }, h('div', { class: 'title' }, location.origin), h('div', { class: 'sub' }, 'Этот адрес вводится в приложениях для Android и Windows; в браузере по нему открывается PWA'))),
+      h('div', { class: 'row' }, h('div', { class: 'grow' }, h('div', { class: 'title' }, location.origin + '/admin'), h('div', { class: 'sub' }, 'Админ-панель (эта страница)')))),
+  ];
+}
+
+function usersView() {
+  const q = filter.toLowerCase();
+  const list = data.users.filter((u) => !q || `${name(u)} ${u.email} ${u.phone}`.toLowerCase().includes(q));
+  const editUser = (u) => formModal('Пользователь', 'Изменения применяются сразу, вход пользователю повторять не нужно.', [
+    { key: 'firstName', label: 'Имя', value: u.firstName }, { key: 'lastName', label: 'Фамилия', value: u.lastName },
+    { key: 'email', label: 'Почта', value: u.email, type: 'email' }, { key: 'phone', label: 'Телефон', value: u.phone },
+    { key: 'role', label: 'Роль', value: u.role, options: [['user', 'Пользователь'], ['admin', 'Администратор (управляет общей базой)']] },
+    { key: 'moveToUrl', label: 'Перенести на сервер', value: u.moveToUrl, placeholder: 'https://новый-адрес', hint: 'Приложение этого пользователя само переключится на указанный адрес. Пусто — остаётся на этом сервере.' },
+  ], 'Сохранить', (v) => api('PATCH', `/users/${u.id}`, v));
+  const resetPw = (u) => formModal('Новый пароль', `Для ${name(u)} (${u.email}). Все его сеансы будут завершены.`, [{ key: 'newPassword', label: 'Новый пароль', type: 'text', hint: 'Не короче 8 символов. Передайте пароль пользователю лично.' }], 'Сменить пароль', (v) => api('POST', `/users/${u.id}/password`, v));
+  const create = () => formModal('Новый пользователь', 'Аккаунт создаётся без регистрации — пользователю останется только войти.', [
+    { key: 'firstName', label: 'Имя' }, { key: 'lastName', label: 'Фамилия' }, { key: 'email', label: 'Почта', type: 'email' }, { key: 'phone', label: 'Телефон' }, { key: 'password', label: 'Пароль', hint: 'Не короче 8 символов' },
+  ], 'Создать', (v) => api('POST', '/users', v));
+  return [
+    h('div', { class: 'acts', style: 'margin-bottom:14px' },
+      h('input', { type: 'search', placeholder: 'Поиск: имя, почта, телефон', value: filter, style: 'flex:1;min-width:200px', oninput: (e) => { filter = e.target.value; const pos = e.target.selectionStart; render(); const el = root.querySelector('input[type=search]'); el.focus(); el.setSelectionRange(pos, pos); } }),
+      h('button', { class: 'btn', onclick: create }, '+ Создать пользователя')),
+    list.length ? h('div', { class: 'card' }, list.map((u) => h('div', { class: 'row' },
+      h('div', { class: 'av' }, initials(u)),
+      h('div', { class: 'grow' },
+        h('div', { class: 'title' }, name(u), u.role === 'admin' ? h('span', { class: 'badge gold' }, 'Администратор') : null, u.blocked ? h('span', { class: 'badge danger' }, 'Заблокирован') : null, u.moveToUrl ? h('span', { class: 'badge' }, 'Перенос') : null),
+        h('div', { class: 'sub' }, [u.email, u.phone].filter(Boolean).join(' · ')),
+        h('div', { class: 'sub' }, `Контактов: ${u.contacts} · активных долгов: ${u.activeDebts} · сеансов: ${u.sessions} · последний вход: ${fmtDate(u.lastLogin)}`)),
+      h('div', { class: 'acts', style: 'align-items:center' },
+        h('span', { class: 'sub' }, 'Базы ЧС'), sw(u.sharedBlacklistAccess || u.role === 'admin', 'Доступ к базам чёрного списка', (v) => act(() => api('PATCH', `/users/${u.id}`, { sharedBlacklistAccess: v }), v ? 'Доступ открыт' : 'Доступ закрыт')),
+        h('button', { class: 'btn ghost sm', onclick: () => editUser(u) }, 'Изменить'),
+        h('button', { class: 'btn ghost sm', onclick: () => resetPw(u) }, 'Пароль'),
+        h('button', { class: 'btn ghost sm', onclick: () => act(() => api('POST', `/users/${u.id}/logout`), 'Сеансы завершены') }, 'Выйти везде'),
+        h('button', { class: 'btn sm ' + (u.blocked ? 'ghost' : 'danger'), onclick: () => act(() => api('PATCH', `/users/${u.id}`, { blocked: !u.blocked }), u.blocked ? 'Разблокирован' : 'Заблокирован') }, u.blocked ? 'Разблокировать' : 'Заблокировать')),
+    ))) : h('div', { class: 'card empty' }, data.users.length ? 'Никого не найдено' : 'Пользователей пока нет. Создайте первого — он станет администратором общей базы.'),
+  ];
+}
+
+function settingsView() {
+  const cfg = data.settings;
+  const company = h('input', { value: cfg.companyName, maxLength: 60 });
+  const move = h('input', { value: cfg.moveToUrl, placeholder: 'https://новый-адрес (пусто — не переносить)' });
+  const newKey = h('input', { type: 'text', placeholder: 'Новый ключ, не короче 12 символов', autocomplete: 'off' });
+  const toggle = (title, sub, k) => h('div', { class: 'row' }, h('div', { class: 'grow' }, h('div', { class: 'title' }, title), h('div', { class: 'sub' }, sub)), sw(cfg[k], title, (v) => act(() => api('PATCH', '/settings', { [k]: v }), 'Сохранено')));
+  return [
+    h('div', { class: 'card pad' },
+      field('Название компании', company, 'Показывается в шапке всех приложений и на экране входа'),
+      h('button', { class: 'btn', onclick: () => act(() => api('PATCH', '/settings', { companyName: company.value.trim() }), 'Название сохранено') }, 'Сохранить название')),
+    h('h3', {}, 'Доступ и приложения'),
+    h('div', { class: 'card' },
+      toggle('Открытая регистрация', 'Если выключить, аккаунты создаёт только администратор в этой панели', 'registrationOpen'),
+      toggle('Скрыть серверные настройки', 'В приложениях пропадут блок «Сервер» и кнопка «Сменить сервер»', 'hideServerSettings')),
+    h('h3', {}, 'Перенос всех пользователей на другой сервер'),
+    h('div', { class: 'card pad' },
+      field('Новый адрес сервера', move, 'Приложения для Android и Windows сами переключатся на этот адрес, в браузере появится ссылка. Данные между серверами не копируются — сначала перенесите папку data. Для одного пользователя адрес задаётся в его карточке.'),
+      h('button', { class: 'btn', onclick: () => act(() => api('PATCH', '/settings', { moveToUrl: move.value.trim() }), move.value.trim() ? 'Перенос включён' : 'Перенос выключен') }, 'Сохранить адрес')),
+    h('h3', {}, 'Ключ администратора'),
+    h('div', { class: 'card pad' },
+      field('Сменить ключ', newKey, 'После смены войдите в панель заново с новым ключом. В файле admin-key.txt новый ключ не сохраняется.'),
+      h('button', { class: 'btn ghost', onclick: async () => { const k = newKey.value.trim(); try { await api('POST', '/key', { newKey: k }); key = k; sessionStorage.setItem(KEY, k); toast('Ключ изменён'); newKey.value = ''; } catch (e) { toast(e.message, true); } } }, 'Сменить ключ')),
+  ];
+}
+
+function blacklistView() {
+  const text = h('textarea', { placeholder: 'Иванов Иван; +7 900 000-00-00; Не вернул долг\nПетров Пётр; ; Мошенничество' });
+  const source = h('select', {}, h('option', { value: 'external' }, 'Внешняя база'), h('option', { value: 'shared' }, 'Общая база участников'));
+  const q = filter.toLowerCase();
+  const list = data.blacklist.filter((e) => !q || `${name(e)} ${e.phone} ${e.reason}`.toLowerCase().includes(q));
+  return [
+    h('div', { class: 'card pad' },
+      h('div', { class: 'two' }, field('Куда загрузить', source), h('div')),
+      field('Записи', text, 'Одна строка — одна запись: «Фамилия Имя; телефон; причина». Разделитель — точка с запятой или табуляция (можно вставить из Excel).'),
+      h('button', { class: 'btn', onclick: () => act(async () => { const r = await api('POST', '/blacklist/import', { text: text.value, source: source.value }); toast(`Добавлено: ${r.added}${r.skipped ? `, пропущено: ${r.skipped}` : ''}`); }) }, 'Загрузить')),
+    h('h3', {}, `Записи в базах · ${data.blacklist.length}`),
+    h('input', { type: 'search', placeholder: 'Поиск по записям', value: filter, style: 'margin-bottom:12px', oninput: (e) => { filter = e.target.value; const pos = e.target.selectionStart; render(); const el = root.querySelector('input[type=search]'); el.focus(); el.setSelectionRange(pos, pos); } }),
+    list.length ? h('div', { class: 'card' }, list.slice(0, 300).map((e) => h('div', { class: 'row' },
+      h('div', { class: 'grow' },
+        h('div', { class: 'title' }, name(e), e.phone ? ' · ' + e.phone : '', h('span', { class: 'badge ' + (e.source === 'external' ? 'sage' : 'gold') }, e.source === 'external' ? 'Внешняя база' : 'Общая база')),
+        h('div', { class: 'sub' }, e.reason), h('div', { class: 'sub' }, `${e.source === 'external' ? 'Загружено' : 'Добавил(а) ' + (e.authorName || 'участник')} · ${fmtDate(e.createdAt)}`)),
+      h('button', { class: 'btn danger sm', onclick: () => act(() => api('DELETE', `/blacklist/${e.id}`), 'Запись удалена') }, 'Удалить')))) : h('div', { class: 'card empty' }, 'Записей нет'),
+    list.length > 300 ? h('div', { class: 'hint' }, 'Показаны первые 300 записей — уточните поиск.') : null,
+  ];
+}
+
+const TABS = [['overview', 'Обзор', overviewView], ['users', 'Пользователи', usersView], ['settings', 'Настройки сервера', settingsView], ['blacklist', 'Базы чёрного списка', blacklistView]];
+function render() {
+  root.replaceChildren();
+  if (!data) { root.append(loginView()); root.querySelector('input')?.focus(); return; }
+  const view = TABS.find((t) => t[0] === tab)[2];
+  root.append(h('div', { class: 'wrap' },
+    h('div', { class: 'top' }, h('img', { src: 'icon.svg', alt: '' }), h('h1', {}, 'Мои ', h('span', {}, 'Финансы'), h('small', {}, 'Админ-панель сервера')),
+      h('a', { class: 'btn ghost sm', href: '/' }, 'Открыть приложение'),
+      h('button', { class: 'btn ghost sm', onclick: () => act(() => Promise.resolve(), 'Обновлено') }, 'Обновить'),
+      h('button', { class: 'btn ghost sm', onclick: () => { key = ''; sessionStorage.removeItem(KEY); data = null; render(); } }, 'Выйти')),
+    h('div', { class: 'tabs', role: 'tablist' }, TABS.map(([id, label]) => h('button', { class: 'tab' + (id === tab ? ' on' : ''), role: 'tab', 'aria-selected': String(id === tab), onclick: () => { tab = id; filter = ''; render(); } }, label))),
+    view()));
+}
+if (key) load().catch(() => render()); else render();
+</script>
+</body>
+</html>
